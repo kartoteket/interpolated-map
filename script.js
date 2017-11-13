@@ -26,6 +26,8 @@ d3.selectAll('.button').each(function(whatever,index,list) {
       var previousItem = forests[previousIndex];
       d3.select('.button_' + previousItem.id).classed('selected', false);
       d3.select('.forest_original_' + previousItem.id).style('fill', '#099209');
+      d3.select('.chart').remove();
+      d3.selectAll('.axis').remove();
     }
 
     //
@@ -143,19 +145,19 @@ function zoomToItem(index) {
       var t = d3.transition()
           .duration(100)
           .ease(d3.easeLinear);
-      // var t2 = d3.transition()
-      //     .duration(2000)
-      //     .ease(d3.easeLinear);
+
       d3.select('.forest_original_' + item.id)
           .transition(t)
           .style('fill','#F6F1EB')
           .transition()
           .duration(2000)
-          .style('fill', '#86311B' );
+          .style('fill', '#86311B' )
+          .on('end', function () {
+              if (index === 0) {
+                areaChart.init(200, width);
+              }
+          });
 
-      if (index === 0) {
-        areaChart.init(200, width);
-      }
 
     }, 1000);
 

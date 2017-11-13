@@ -4,7 +4,7 @@ areaChart = {
         margin = {top: 20, right: 80, bottom: 10, left: 50},
         width = w - margin.left - margin.right,
         height = h - margin.top - margin.bottom,
-        g = svg.append("g").attr("transform", "translate(" + margin.left + "," + (+svg.attr('height') - h - margin.top) + ")");
+        g = svg.append("g").attr("transform", "translate(" + margin.left + "," + (+svg.attr('height') - h) + ")");
 
     var x = d3.scaleLinear()
         .rangeRound([0, width]);
@@ -35,6 +35,7 @@ areaChart = {
       // area.y0(300000);
 
       g.append("path")
+          .attr('class', 'chart')
           .datum(data)
           .attr("fill", "#86311B")
           .attr('opacity', 0.5)
@@ -44,10 +45,12 @@ areaChart = {
           });
 
       g.append("g")
+          .attr('class', 'axis')
           .attr("transform", "translate(0," + height + ")")
           .call(d3.axisBottom(x).tickFormat(d3.format("d")));
 
       g.append("g")
+          .attr('class', 'axis')
           .attr('transform', 'translate(' + width + ',0) ')
           .call(d3.axisRight(y).ticks(5))
         .append("text")
