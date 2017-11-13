@@ -9,22 +9,36 @@ var forests = [
   {id: 'asia', translate: 'translate(-1300,-250), scale(2.1)'}
 ];
 
-var previousLink = null;
+var previousIndex = -1;
 
 d3.selectAll('.button').each(function(whatever,index,list) {
   var i = index;
   d3.select(this).on('click', function () {
 
+
+
     //
     // Toggle the selected for this and the prevoius, storing the latter
     //
     d3.select(this).classed('selected', true);
-    zoomToItem(i);
 
-    if (previousLink) {
-      d3.select(previousLink).classed('selected', false);
+    if (previousIndex != -1) {
+      var previousItem = forests[previousIndex];
+      d3.select('.button_' + previousItem.id).classed('selected', false);
+      d3.select('.forest_original_' + previousItem.id).style('fill', '#099209');
     }
-    previousLink = this;
+
+    //
+    // Reselecting a selected item, zoom back to start
+    //
+    if (previousIndex === i) {
+      svg.selectAll('path')
+          .transition().duration(1000)
+          .attr('transform', '');
+    } else {
+      zoomToItem(i);
+    }
+    previousIndex = i;
   });
 });
 
@@ -38,10 +52,6 @@ var projection = d3.geoMercator()
                     .scale(210)
                     .translate([width/2.2 , height/2.2]);
 
-// americas
-// var projection = d3.geoMercator()
-//                     .scale(350)
-//                     .translate([width , height / 3]);
 
 var path = d3.geoPath()
             .projection(projection);
@@ -61,26 +71,6 @@ svg.append("use")
     .attr("class", "fill")
     .attr("xlink:href", "#sphere");
 
-
-//insert the current forest, before the original
-// svg.insert('path', '.map')
-//     .attr('class', 'forest_americas forest');
-
-// svg.insert('path', '.map')
-//     .attr('class', 'forest_asia forest');
-
-// svg.insert('path', '.map')
-//     .attr('class', 'forest_africa forest');
-
-// //create the original forest layer, before the land
-// svg.insert('path', '.forest_americas')
-//     .attr('class', 'forest_original_americas forest_original');
-
-// svg.insert('path', '.forest_africa')
-//     .attr('class', 'forest_original_africa forest_original');
-
-// svg.insert('path', '.forest_asia')
-//     .attr('class', 'forest_original_asia forest_original');
 // create the country borders, before the land
 svg.insert('path','.map')
     .attr('class', 'land');
@@ -143,7 +133,7 @@ function zoomToItem(index) {
     //
     svg.selectAll('path')
       .transition().duration(1000)
-      .attr('transform', item.translate)
+      .attr('transform', item.translate);
 
 
     //
@@ -153,10 +143,15 @@ function zoomToItem(index) {
       var t = d3.transition()
           .duration(100)
           .ease(d3.easeLinear);
-
+      // var t2 = d3.transition()
+      //     .duration(2000)
+      //     .ease(d3.easeLinear);
     d3.select('.forest_original_' + item.id)
         .transition(t)
-        .style('fill','#F6F1EB');
+        .style('fill','#F6F1EB')
+        .transition()
+        .duration(2000)
+        .style('fill', '#86311B' )
 
     }, 1000);
 
