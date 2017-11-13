@@ -146,12 +146,16 @@ function zoomToItem(index) {
       // var t2 = d3.transition()
       //     .duration(2000)
       //     .ease(d3.easeLinear);
-    d3.select('.forest_original_' + item.id)
-        .transition(t)
-        .style('fill','#F6F1EB')
-        .transition()
-        .duration(2000)
-        .style('fill', '#86311B' )
+      d3.select('.forest_original_' + item.id)
+          .transition(t)
+          .style('fill','#F6F1EB')
+          .transition()
+          .duration(2000)
+          .style('fill', '#86311B' );
+
+      if (index === 0) {
+        areaChart.init(200, width);
+      }
 
     }, 1000);
 
