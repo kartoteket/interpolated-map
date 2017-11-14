@@ -114,6 +114,9 @@ function fetchCurrent() {
       var datum = topojson.feature(result, result.objects[id]);
       createSVGItem(id, datum, '');
     }
+
+    // zoomToItem(0);
+    // areaChart.init(200, width);
   });
 
 }
@@ -151,18 +154,18 @@ function zoomToItem(index) {
           .style('fill','#F6F1EB')
           .transition()
           .duration(2000)
-          .style('fill', '#86311B' )
-          .on('end', function () {
-              if (index === 0) {
-                areaChart.init(200, width);
-              }
-          });
+          .style('fill', '#86311B' );
+          // .on('end', function () {
+          //     if (index === 0) {
+          //       areaChart.init(200, width);
+          //     }
+          // });
 
 
     }, 1000);
 
-
   }
+
 }
 
 
